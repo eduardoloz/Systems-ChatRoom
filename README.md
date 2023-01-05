@@ -4,8 +4,13 @@
 Eduardo Lozano, Aiden Mizhen, Paul Serbanescu
 # A statement of the problem you are solving and/or a high level description of the project.
 We aim to create a multiplayer game hosted on a server. We want the game to work with any (reasonable) amount of users.
+The server will list all ongoing matches as well as lobbies waiting for players to join. A user will be able join any lobby as a player or spectator
 # A description as to how the project will be used (describe the user interface).
-Players will be able to connect to the server and play a simple text based game (we haven't decided what game yet) and send messages.
+Players will be able to connect to the server and either:
+- Create a match and wait for sufficient players to join
+- Join a match
+- Spectate an ongoing match
+- Send chat messages during a match (playing or spectating)
 # A description of your technical design. This should include:
 ## How you will be using the topics covered in class in the project.
 We will use Pipe Networking, Sockets, Forking, and (normal) Piping to create a forking server which can communicate to the main server running the game.

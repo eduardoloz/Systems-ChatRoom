@@ -43,9 +43,10 @@ int main(int argc, char *argv[]){
     //DO STUFF
     int n;
     char buff[1025];
+    strcpy(buff, "Hello");
 
-  	if(n = read(sd, buff, sizeof(buff)) <= 0){
-  		printf("\n Read error \n");
+  	if(n = write(sd, buff, sizeof(buff)) <= 0){
+  		printf("\n Write error \n");
       exit(1);
   	}
     printf("%s",buff);

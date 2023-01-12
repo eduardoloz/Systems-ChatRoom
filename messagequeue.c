@@ -33,7 +33,9 @@ void new_mssg(char* mssg, struct chat_list* list){
     new_mssg -> new = NULL;
     chat_list -> newest = new_mssg;
     if(chat_list->len>=200){
-        
+        chat_list->oldest = (chat_list->oldest)->new;
+        free((chat_list->oldest)->old);
+        (chat_list->oldest)->old = NULL;
     } else {
         chat_list->len++;
     }

@@ -44,7 +44,7 @@ int main(int argc, char *argv[]){
     int n;
     char buff[1025];
 
-  	if(n = read(sd, buff, sizeof(buff)) <= 0){
+  	if((n = read(sd, buff, sizeof(buff)) <= 0)){
   		printf("\n Read error \n");
       exit(1);
   	}

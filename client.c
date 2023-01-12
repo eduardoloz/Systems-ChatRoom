@@ -7,6 +7,18 @@
 #include <errno.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "header.h"
+
+int sd;
+
+void exitHandler(int sig) {
+    write(sd, SIG_CLIENT_EXIT, strlen(SIG_CLIENT_EXIT));
+
+    // char *pid_str = malloc(5);
+    // sprintf(pid_str, "%d", getpid());
+    // remove(pid_str);
+    exit(0);
+}
 
 int main(int argc, char *argv[]){
     if(argc < 3) {
@@ -49,6 +61,27 @@ int main(int argc, char *argv[]){
   		printf("\n Write error \n");
       exit(1);
   	}
+    for (;;) {
+
+        // if(read(client_wkp, read_buff, MSG_SIZE) == -1) {
+        //     printf("Oh dear, something went wrong with read()! %s\n", strerror(errno));
+        // }
+
+        // while (read(client_wkp, read_buff, MSG_SIZE) > 0) {
+        //     printf("read from server> %s\n", read_buff);
+        // }
+
+        signal(SIGINT, exitHandler);
+
+        // printf("before fgets...\n");
+        fgets(buff, MSG_SIZE, stdin);
+        int len = strlen(buff);
+        buff[len-1] = '\0';
+
+        write(sd, buff, MSG_SIZE);
+
+    }
+
     printf("%s",buff);
     printf("\n%d bytes read\n",n);
 

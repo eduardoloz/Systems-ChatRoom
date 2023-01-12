@@ -65,17 +65,14 @@ int main(){
             read(client_socket,buff, sizeof(buff));
             //trim the string
             buff[strlen(buff)]=0; //clear newline
-            // if(buff[strlen(buff)-1]==13){
-            //     //clear windows line ending
-            //     buff[strlen(buff)-1]=0;
-            // }
+            if(buff[strlen(buff)-1]==13){
+
 
             printf("\nRecieved from client '%s'\n",buff);
             close(client_socket);
+            }
         }
     }
-
-
 
     free(hints);
     freeaddrinfo(results);

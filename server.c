@@ -1,24 +1,15 @@
 #include <sys/socket.h>
-  #include <sys/types.h>
-  #include <sys/socket.h>
-  #include <netdb.h>
-  #include <time.h>
-  #include <stdio.h>
-  #include <string.h>
-  #include <errno.h>
-  #include <unistd.h>
-  #include <stdlib.h>
-
-  #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
 #include <time.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
-#include <stdlib.h>
+
+
 
 int main(){
     struct addrinfo * hints, * results;
@@ -61,16 +52,8 @@ int main(){
     while(1){
 
         FD_ZERO(&read_fds);
-        FD_SET(STDIN_FILENO, &read_fds);
         FD_SET(listen_socket,&read_fds);
         int i = select(listen_socket+1, &read_fds, NULL, NULL, NULL);
-
-        //if standard in, use fgets
-        if (FD_ISSET(STDIN_FILENO, &read_fds)) {
-            fgets(buff, sizeof(buff), stdin);
-            buff[strlen(buff)-1]=0;
-            printf("Recieved from terminal: '%s'\n",buff);
-        }
 
         // if socket
         if (FD_ISSET(listen_socket, &read_fds)) {

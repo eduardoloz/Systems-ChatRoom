@@ -14,3 +14,6 @@ Populate project proposal
 * Decided to remove the middle men and just use select
 * Changed plan for the project, and setup boilerplate code
 * Designed user interface; will use terminal formatting. Page will refresh whenever a new message is sent
+
+## 01/11/23
+* Created data structures for a message and a linked list for a queue for storing message history

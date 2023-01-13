@@ -17,3 +17,8 @@ Populate project proposal
 
 ## 01/11/23
 * Created data structures for a message and a linked list for a queue for storing message history
+
+
+## 01/12/23
+* Finished the message linked list.
+* Expanded message datatype to include metadata such as user and time sent

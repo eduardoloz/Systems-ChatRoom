@@ -23,6 +23,7 @@ void exitHandler(int sig) {
 int main(int argc, char *argv[]){
     if(argc < 3) {
         printf("Provide server address and port as a parameters\n");
+        printf("%s, %s, %s", argv[0], argv[1], argv[2]);
         exit(1);
     }
     printf("connecting to %s:%s\n",argv[1],argv[2]);
@@ -57,7 +58,7 @@ int main(int argc, char *argv[]){
     char buff[1025];
     strcpy(buff, "Hello");
 
-  	if(n = write(sd, buff, sizeof(buff)) <= 0){
+  	if((n = write(sd, buff, sizeof(buff)) <= 0)){
   		printf("\n Write error \n");
       exit(1);
   	}

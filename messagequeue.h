@@ -22,7 +22,7 @@ struct chat_mssg{
     struct chat_mssg* new;
     char* text;
     int time;
-    int usr;
+    char* usr;
 };
 
 

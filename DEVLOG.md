@@ -18,6 +18,7 @@ Populate project proposal
 ## 01/11/23
 * Created data structures for a message and a linked list for a queue for storing message history
 
-## 10/12/23
-*In class we fixed our previously working demo in the server to the sample server code with refresh. Since that is working all we have left is to implement the struct code for message history
-*Struct almost fully done
+## 01/12/23
+* Finished the message linked list.
+* Expanded message datatype to include metadata such as user and time sent
+

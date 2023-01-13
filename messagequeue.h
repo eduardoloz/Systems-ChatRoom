@@ -27,4 +27,4 @@ struct chat_mssg{
 
 
 struct chat_list* new_list(char* first_mssg);
-void new_mssg(char* mssg, struct chat_list* list);
+void add_new_mssg(char* mssg, struct chat_list* list);

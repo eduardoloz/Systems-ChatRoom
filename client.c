@@ -55,13 +55,8 @@ int main(int argc, char *argv[]){
 
     //DO STUFF
     int n;
-    char buff[1025];
-    strcpy(buff, "Hello");
+    char buff[MSG_SIZE];
 
-  	if((n = write(sd, buff, sizeof(buff)) <= 0)){
-  		printf("\n Write error \n");
-      exit(1);
-  	}
     for (;;) {
 
         // if(read(client_wkp, read_buff, MSG_SIZE) == -1) {
@@ -79,7 +74,12 @@ int main(int argc, char *argv[]){
         int len = strlen(buff);
         buff[len-1] = '\0';
 
+        if((n = write(sd, buff, MSG_SIZE <= 0))){
+  		    printf("\n Write error \n");
+            exit(1);
+  	    }
         write(sd, buff, MSG_SIZE);
+        printf("MESSAGE SENT WAS: %s\n", buff);
 
     }
 

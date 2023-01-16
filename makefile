@@ -9,7 +9,7 @@ client.o: client.c
 
 
 client: clients
-	./clients
+	./clients $(ARGS)
 server: servers
 	./servers
 	

@@ -15,3 +15,4 @@ client.o: client.c
 
 clean:
 	rm -f *.o server client
+	rm SERVER_MESSAGES

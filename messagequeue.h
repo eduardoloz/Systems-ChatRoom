@@ -17,7 +17,7 @@ struct chat_list{
 };
 
 
-struct chat_mssg{
+struct chat_mssg {
     struct chat_mssg* old;
     struct chat_mssg* new;
     char* text;
@@ -26,5 +26,7 @@ struct chat_mssg{
 };
 
 
-struct chat_list* new_list(char* first_mssg);
-void add_new_mssg(char* mssg, struct chat_list* list);
+struct chat_list* new_list(struct chat_mssg* first_mssg);
+void add_mssg(struct chat_mssg* mssg, struct chat_list* chat);
+struct chat_mssg* new_mssg(char* mssg, int my_time, char* user);
+void print_chat(struct chat_list* chat);

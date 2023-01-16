@@ -1,31 +1,24 @@
 #include "messagequeue.h"
 
-struct chat_list* new_list(char* first_text){
-    struct chat_list* new_list = malloc(1*sizeof(struct chat_list));
-    new_list -> oldest = NULL;
-    new_list -> newest = NULL;
+struct chat_list* new_list(struct chat_mssg* first_mssg){
+    struct chat_list* list = malloc(1*sizeof(struct chat_list));
+    list -> oldest = NULL;
+    list -> newest = NULL;
 
-    struct chat_mssg* first_mssg = malloc(1*sizeof(struct chat_mssg));
-    first_mssg -> text = first_text;
-    first_mssg -> new = NULL;
-    first_mssg -> old = NULL;
+    list -> oldest = first_mssg;
+    list -> newest = first_mssg;
+    list -> len = 1;
 
-    new_list -> oldest = first_mssg;
-    new_list -> newest = first_mssg;
-    new_list -> len = 1;
-
-    return new_list;
+    return list;
 }
 
 
-void add_new_mssg(char* mssg, struct chat_list* chat){
-    struct chat_mssg* new_mssg = malloc(1*sizeof(struct chat_mssg));
-    new_mssg -> text = mssg;
-    new_mssg -> old = chat -> newest;
-    chat -> newest -> new = new_mssg;
-    new_mssg -> new = NULL;
-    chat -> newest = new_mssg;
-    if(chat->len>=200){
+void add_mssg(struct chat_mssg* mssg, struct chat_list* chat){
+    mssg -> old = chat -> newest;
+    chat -> newest -> new = mssg;
+    mssg -> new = NULL;
+    chat -> newest = mssg;
+    if(chat->len>=SIZE){
         chat->oldest = (chat->oldest)->new;
         free((chat->oldest)->old);
         (chat->oldest)->old = NULL;
@@ -34,30 +27,33 @@ void add_new_mssg(char* mssg, struct chat_list* chat){
     }
  }
 
- void print_chat(struct chat_list* chat){
+struct chat_mssg* new_mssg(char* mssg, int my_time, char* user){
+     struct chat_mssg* my_mssg = malloc(1*sizeof(struct chat_mssg));
+     my_mssg -> text = mssg;
+     my_mssg -> old = NULL;
+     my_mssg -> new = NULL;
+     my_mssg -> time = my_time;
+     my_mssg -> usr = user;
+     return my_mssg;
+ }
+
+void print_chat(struct chat_list* chat){
      //MODIFY to format the chat
      struct chat_mssg* m = chat->oldest;
      while(m){
-         printf("%s\n", m->text);
+         printf("<%s> %s %d\n", m->usr, m->text, m->time);
          m = m->new;
      }
  }
 
 int main(int argc, char const *argv[]) {
-    char* m = "hello";
+    struct chat_mssg* m = new_mssg("hello", 10, "bobby");
     struct chat_list* list = new_list(m);
-    // printf("%s\n", list->oldest->text);
-    // printf("%s\n", list->newest->text);
-    // printf("%d\n", list->len);
-    // printf("=======\n");
-    char* m2 = "goobye";
-    char* m3 = "urmom";
-    add_new_mssg(m2, list);
-    // printf("%s\n", list->oldest->text);
-    add_new_mssg(m3, list);
-    // printf("%s\n", list->oldest->text);
-    // printf("%s\n", list->newest->text);
-    // printf("%d\n", list->len);
-    // printf("=======\n");
+    print_chat(list);
+    printf("=======\n");
+    struct chat_mssg* m2 = new_mssg("goobye", 14, "jake");
+    struct chat_mssg* m3 = new_mssg("urmom", 17, "bobby");
+    add_mssg(m2, list);
+    add_mssg(m3, list);
     print_chat(list);
 }

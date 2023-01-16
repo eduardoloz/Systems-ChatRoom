@@ -80,7 +80,6 @@ int main(int argc, char *argv[]){
   	    }
         write(sd, buff, MSG_SIZE);
         printf("MESSAGE SENT WAS: %s\n", buff);
-
     }
 
     printf("%s",buff);

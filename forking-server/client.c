@@ -46,21 +46,21 @@ int main(int argc, char *argv[]){
     // sent username to server
     char *pid_str = calloc(5, sizeof(char));
     char *answer = calloc(2, sizeof(char));
-    char *username = calloc(30, sizeof(char));
+    char *username = calloc(255, sizeof(char));
 
     printf("Would you like to choose your username? (y\\n)\n");
     fgets(answer, sizeof(answer), stdin);
     answer[strlen(answer)-1] = '\0';
     if (strcasecmp(answer, "y") == 0){
         printf("Enter username:\n");
-        fgets(username, sizeof(username), stdin);    
+        fgets(username, 255, stdin);    
         username[strlen(username)-1] = '\0';
-        write(sd, username, sizeof(username));
+        write(sd, username, 255);
     }else{
         printf("No user name for you! Pid given!");
         sprintf(pid_str, "%d", getpid());
         strcpy(username, pid_str);
-        write(sd, username, sizeof(username));
+        write(sd, username, 255);
     }
 
     //DO STUFF

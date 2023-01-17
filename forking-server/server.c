@@ -33,8 +33,8 @@
             int client_socket = accept(listen_socket,(struct sockaddr *)&client_address, &sock_size);
 
             // request the client's username
-            char *username = calloc(15, sizeof(char));
-            read(client_socket, username, sizeof(username));
+            char *username = calloc(255, sizeof(char));
+            read(client_socket, username, 255);
             printf("user %s has joined\n", username);
 
             int child = fork();

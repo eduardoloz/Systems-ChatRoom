@@ -29,6 +29,8 @@ Populate project proposal
 
 Additionally: worked on the implementation of the server select with old forking version of the code (discontinued as of 1/16)
 
+* Decided to pivot our project to just a chat instead of game due to unpredicted strife, difficulty and challenge
+
 ## 01/15/23
 * Made progress on forking server - ran into issue with other's messages only being sent back when the client sent a message
 * Ran into issues on splitting server, only one message sent or received at a time.

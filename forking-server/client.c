@@ -53,31 +53,33 @@ int main(int argc, char *argv[]){
     char *buff = malloc(MSG_SIZE * sizeof(char));
     char *read_buff = malloc(MSG_SIZE);
 
-    // int flags = fcntl(sd, F_GETFL, 0);
-    // fcntl(sd, F_SETFL, flags | O_NONBLOCK);
+    int flags = fcntl(sd, F_GETFL, 0);
+    fcntl(sd, F_SETFL, flags | O_NONBLOCK);
 
 
     fd_set read_fds;
-
 
     for (;;) {
 
         // here use select
         FD_ZERO(&read_fds);
-        FD_SET(sd, &read_fds);
+        FD_SET(STDIN_FILENO, &read_fds);
         FD_SET(sd,&read_fds);
+
         int i = select(sd+1, &read_fds, NULL, NULL, NULL);
+        if(FD_ISSET(STDIN_FILENO, &read_fds)){
+            fgets(buff, MSG_SIZE, stdin);
+
+            write(sd, buff, MSG_SIZE);
+        }
+        
         if(FD_ISSET(sd, &read_fds)){
             read(sd, read_buff, MSG_SIZE);
             printf("%s\n", read_buff);
         }
 
         signal(SIGINT, exitHandler);
-        if(FD_ISSET(STDIN_FILENO, &read_fds)){
-            fgets(buff, MSG_SIZE, stdin);
 
-            write(sd, buff, MSG_SIZE);
-        }
 
 
     }

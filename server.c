@@ -4,13 +4,10 @@
 #include <netdb.h>
 #include <time.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
-#include "header.h"
-
-
+#include <stdlib.h>
 
 int main(){
     struct addrinfo * hints, * results;
@@ -51,7 +48,7 @@ int main(){
     char buff[1025]="";
 
     while(1){
-        printf("Happening again\n");
+
         FD_ZERO(&read_fds);
         FD_SET(STDIN_FILENO, &read_fds);
         FD_SET(listen_socket,&read_fds);
@@ -64,13 +61,23 @@ int main(){
             printf("Connected, waiting for data.\n");
 
             //read the whole buff
-            read(client_socket,buff, MSG_SIZE);
+            read(client_socket,buff, sizeof(buff));
+
+
             //trim the string
+            buff[strlen(buff)]=0; //clear newline
+            if(buff[strlen(buff)]==13){
+                //clear windows line ending
+                buff[strlen(buff)]=0;
+            }
+
             printf("\nRecieved from client '%s'\n",buff);
+            close(client_socket);
         }
-        printf("SPAM MESSAGE\n");
     }
-    
+
+
+
     free(hints);
     freeaddrinfo(results);
     return 0;

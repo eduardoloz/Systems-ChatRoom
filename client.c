@@ -7,23 +7,10 @@
 #include <errno.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include "header.h"
-
-int sd;
-
-void exitHandler(int sig) {
-    write(sd, SIG_CLIENT_EXIT, strlen(SIG_CLIENT_EXIT));
-
-    // char *pid_str = malloc(5);
-    // sprintf(pid_str, "%d", getpid());
-    // remove(pid_str);
-    exit(0);
-}
 
 int main(int argc, char *argv[]){
     if(argc < 3) {
         printf("Provide server address and port as a parameters\n");
-        printf("%s, %s, %s", argv[0], argv[1], argv[2]);
         exit(1);
     }
     printf("connecting to %s:%s\n",argv[1],argv[2]);
@@ -55,36 +42,18 @@ int main(int argc, char *argv[]){
 
     //DO STUFF
     int n;
-    char buff[MSG_SIZE];
+    char buff[1025];
+    while(1){
+        strcpy(buff, "Hello");
+        buff[strlen(buff)] = '\0';
 
-    for (;;) {
-
-        // if(read(client_wkp, read_buff, MSG_SIZE) == -1) {
-        //     printf("Oh dear, something went wrong with read()! %s\n", strerror(errno));
-        // }
-
-        // while (read(client_wkp, read_buff, MSG_SIZE) > 0) {
-        //     printf("read from server> %s\n", read_buff);
-        // }
-
-        signal(SIGINT, exitHandler);
-
-        // printf("before fgets...\n");
-        fgets(buff, MSG_SIZE, stdin);
-        int len = strlen(buff);
-        buff[len-1] = '\0';
-
-        if((n = write(sd, buff, MSG_SIZE <= 0))){
-  		    printf("\n Write error \n");
+      	if((n = write(sd, buff, sizeof(buff))) <= 0){
+      		printf("\n write error \n");
             exit(1);
-  	    }
-        write(sd, buff, MSG_SIZE);
-        printf("MESSAGE SENT WAS: %s\n", buff);
-
+      	}
+        printf("Sent: %s\n",buff);
+        sleep(1);
     }
-
-    printf("%s",buff);
-    printf("\n%d bytes read\n",n);
 
     freeaddrinfo(results);
     return 0;

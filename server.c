@@ -50,6 +50,7 @@ int main(){
     fd_set read_fds;
 
     int connections[MAXCLIENTS];
+    char* usernames[MAXCLIENTS];
     int users = 1;
     connections[0] = listen_socket;
     FD_ZERO(&read_fds);
@@ -63,15 +64,18 @@ int main(){
             int client_socket = accept(listen_socket,(struct sockaddr *)&client_address, &sock_size);
             read(client_socket, buff, sizeof(buff));
             printf("New User %s Has Joined\n", buff);
-            //read the whole buff
+
+            usernames[users] = malloc((strlen(buff)+1)*sizeof(char));
+            strcpy(usernames[users], buff);
+
             connections[users] = client_socket;
             FD_SET(client_socket,&read_fds);
             users++;
         } else {
-            for(int i = 0; i<users; i++){
+            for(int i = 1; i<users; i++){
                 if(FD_ISSET(connections[i], &read_fds)){
                     read(connections[i],buff, sizeof(buff));
-                    printf("%s\n", buff);
+                    printf("%s> %s\n", usernames[i], buff);
                 }
             }
         }

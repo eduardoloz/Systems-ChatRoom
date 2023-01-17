@@ -46,7 +46,7 @@ int main(int argc, char *argv[]){
     // sent username to server
     char *pid_str = calloc(5, sizeof(char));
     char *answer = calloc(2, sizeof(char));
-    char *username = calloc(30, sizeof(char));
+    char *username = calloc(255, sizeof(char));
 
     printf("Would you like to choose your username? (y\\n)\n");
     fgets(answer, sizeof(answer), stdin);

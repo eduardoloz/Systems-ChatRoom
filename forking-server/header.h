@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <signal.h>
 
 #define MSG_SIZE 1000
 #define SIG_CLIENT_EXIT "SIG_CLIENT_EXIT"

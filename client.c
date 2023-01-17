@@ -42,10 +42,15 @@ int main(int argc, char *argv[]){
         printf("Failed to connect\n");
         exit(1);
     }
+    char buff[1025];
+    printf("Enter Username: ");
+    fgets(buff, 1025, stdin);
+    buff[strlen(buff)-1] = '\0';
+    write(sd, buff, sizeof(buff));
+
 
     //DO STUFF
     int n;
-    char buff[1025];
     while(1){
         strcpy(buff, "Hello");
         buff[strlen(buff)] = '\0';

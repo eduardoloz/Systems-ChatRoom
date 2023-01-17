@@ -50,15 +50,10 @@ int main(int argc, char *argv[]){
       	if((n = write(sd, buff, sizeof(buff))) <= 0){
       		printf("\n write error \n");
             exit(1);
-<<<<<<< HEAD
       	}
         printf("Sent: %s\n",buff);
         sleep(1);
-=======
-  	    }
-        write(sd, buff, MSG_SIZE);
-        printf("MESSAGE SENT WAS: %s\n", buff);
->>>>>>> refs/remotes/origin/main
+
     }
 
     freeaddrinfo(results);

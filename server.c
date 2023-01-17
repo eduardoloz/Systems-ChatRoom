@@ -43,41 +43,35 @@ int main(){
     struct sockaddr_storage client_address;
     sock_size = sizeof(client_address);
 
-    fd_set read_fds;
 
     char buff[1025]="";
 
+    fd_set read_fds;
+    FD_ZERO(&read_fds);
+    FD_SET(listen_socket,&read_fds);
+    
     for(;;){
-        printf("Happening again\n");
-        FD_ZERO(&read_fds);
-        printf("This step isn't reached\n");
-        //FD_SET(STDIN_FILENO, &read_fds);
-        //printf("This step isn't reached\n");
-        FD_SET(listen_socket,&read_fds);
-        printf("This step isn't reached\n");
-
         int i = select(listen_socket + 1, &read_fds, NULL, NULL, NULL);
 
-        printf("i is currently: %d\n", i);
         // if socket
         if (FD_ISSET(listen_socket, &read_fds)) {
             //accept the connection
             int client_socket = accept(listen_socket,(struct sockaddr *)&client_address, &sock_size);
-            printf("Connected, waiting for data.\n");
-
             //read the whole buff
+            FD_SET(client_socket);
             read(client_socket,buff, sizeof(buff));
+            printf("%s\n", buff);
+        } else{
 
+            //
+            read(client_socket,buff, sizeof(buff));
+            printf("%s\n", buff);
 
-            //trim the string
-            buff[strlen(buff)]=0; //clear newline
-            if(buff[strlen(buff)]==13){
-                //clear windows line ending
-                buff[strlen(buff)]=0;
-            }
-
-            printf("\nRecieved from client '%s'\n",buff);
-            close(client_socket);
+            // buff[strlen(buff)]=0; //clear newline
+            // if(buff[strlen(buff)]==13){
+            //     //clear windows line ending
+            //     buff[strlen(buff)]=0;
+            // }
         }
     }
 

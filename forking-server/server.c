@@ -42,9 +42,23 @@
             n_child++;
 
             if (child == 0) {
-
                 char *read_msg = malloc(MSG_SIZE * sizeof(char));
+
+                int inner_child = fork();
+
                 for (;;) {
+
+                    if (inner_child == 0) {
+                        int server_read_fp = open("SERVER_MESSAGES", O_RDONLY);
+                        for (;;) {
+                            char *read_buff = malloc(MSG_SIZE);
+
+                            while (read(server_read_fp, read_buff, MSG_SIZE) > 0) {
+                                write(client_socket, read_buff, MSG_SIZE);
+                            }
+                        }
+                    }
+
                     while (read(client_socket, read_msg, MSG_SIZE) > 0) {
 
                         FILE *server_fp;
@@ -64,13 +78,6 @@
                         printf("user %s> %s\n", client_pid, read_msg);
 
                         fclose(server_fp);
-
-                        int server_read_fp = open("SERVER_MESSAGES", O_RDONLY);
-                        char *read_buff = malloc(MSG_SIZE);
-
-                        while (read(server_read_fp, read_buff, MSG_SIZE) > 0) {
-                            write(client_socket, read_buff, MSG_SIZE);
-                        }
                         // close(server_read_fp);
                     }
                 }

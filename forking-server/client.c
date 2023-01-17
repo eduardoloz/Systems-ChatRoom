@@ -71,7 +71,7 @@ int main(int argc, char *argv[]){
     //int flags = fcntl(sd, F_GETFL, 0);
     //fcntl(sd, F_SETFL, flags | O_NONBLOCK);
 
-    //printf("\033[1;1H");
+    printf("\033[1;1H");
     printf("\033[9999;1H");
 
     fd_set read_fds;

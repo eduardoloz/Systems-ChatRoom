@@ -14,7 +14,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
-#define MSG_SIZE 100
+#define MSG_SIZE 1000
 #define SIG_CLIENT_EXIT "SIG_CLIENT_EXIT"
 
 #endif

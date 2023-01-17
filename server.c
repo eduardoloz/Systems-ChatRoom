@@ -47,13 +47,18 @@ int main(){
 
     char buff[1025]="";
 
-    while(1){
-
+    for(;;){
+        printf("Happening again\n");
         FD_ZERO(&read_fds);
-        FD_SET(STDIN_FILENO, &read_fds);
+        printf("This step isn't reached\n");
+        //FD_SET(STDIN_FILENO, &read_fds);
+        //printf("This step isn't reached\n");
         FD_SET(listen_socket,&read_fds);
-        int i = select(listen_socket+1, &read_fds, NULL, NULL, NULL);
+        printf("This step isn't reached\n");
 
+        int i = select(listen_socket + 1, &read_fds, NULL, NULL, NULL);
+
+        printf("i is currently: %d\n", i);
         // if socket
         if (FD_ISSET(listen_socket, &read_fds)) {
             //accept the connection

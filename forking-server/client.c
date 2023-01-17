@@ -5,9 +5,9 @@ int sd;
 void exitHandler(int sig) {
     write(sd, SIG_CLIENT_EXIT, strlen(SIG_CLIENT_EXIT));
 
-    // char *pid_str = malloc(5);
-    // sprintf(pid_str, "%d", getpid());
-    // remove(pid_str);
+    char *pid_str = malloc(6);
+    sprintf(pid_str, "%d", getpid());
+    remove(pid_str);
     exit(0);
 }
 
@@ -53,26 +53,20 @@ int main(int argc, char *argv[]){
     char *buff = malloc(MSG_SIZE * sizeof(char));
     char *read_buff = malloc(MSG_SIZE);
 
-    // int client_wkp;
-    // mkfifo(pid_str, 0666);
-    // client_wkp = open(pid_str, O_RDONLY);
+    int flags = fcntl(sd, F_GETFL, 0);
+    fcntl(sd, F_SETFL, flags | O_NONBLOCK);
 
     for (;;) {
 
-        // if(read(client_wkp, read_buff, MSG_SIZE) == -1) {
-        //     printf("Oh dear, something went wrong with read()! %s\n", strerror(errno));
-        // }
-
-        // while (read(client_wkp, read_buff, MSG_SIZE) > 0) {
-        //     printf("read from server> %s\n", read_buff);
-        // }
+        // here use select
+        while (read(sd, read_buff, MSG_SIZE) > 0) {
+            printf("read from server: %s\n", read_buff);
+        }
 
         signal(SIGINT, exitHandler);
 
         // printf("before fgets...\n");
         fgets(buff, MSG_SIZE, stdin);
-        int len = strlen(buff);
-        buff[len-1] = '\0';
 
         write(sd, buff, MSG_SIZE);
 

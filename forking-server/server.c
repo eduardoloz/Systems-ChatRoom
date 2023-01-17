@@ -23,12 +23,12 @@
         int *all_children = malloc(100 * sizeof(int));
         int n_child = 0;
 
-        int server_wkp;
-        mkfifo("SERVER_WKP", 0777);
-        server_wkp = open("SERVER_WKP", O_RDWR);
+        // make msg buffer file
+        FILE *fp;
+        fp = fopen("SERVER_MESSAGES", "w");
+        fclose(fp);
 
       for(;;) {
-
             //wait for next client
             int client_socket = accept(listen_socket,(struct sockaddr *)&client_address, &sock_size);
 
@@ -43,32 +43,35 @@
 
             if (child == 0) {
 
-                // printf("opened client pipe %d...\n", client_pid);
-                // int client_wkp = open(client_pid, O_WRONLY);
-
                 char *read_msg = malloc(MSG_SIZE * sizeof(char));
                 for (;;) {
                     while (read(client_socket, read_msg, MSG_SIZE) > 0) {
+
+                        FILE *server_fp;
+                        server_fp = fopen("SERVER_MESSAGES", "a+");
+
                         // check to see if connection was closed
                         if (strcmp(read_msg, SIG_CLIENT_EXIT) == 0) {
                             printf("user %s has left\n", client_pid);
                             exit(0);
                         }
 
-                        // write message to server
-                        for (int i = 0; i < n_child; i++) {
-                            // printf("writing...\n");
-                            write(server_wkp, read_msg, strlen(read_msg));
-                        }
+                        // write message to buffer
+                        fprintf(server_fp, "user %s> %s", client_pid, read_msg);
 
-                        // read from server, write message back to client
-                        char *read_server = malloc(MSG_SIZE);
-                        read(server_wkp, read_server, MSG_SIZE);
-                        // printf("wrote %s to child...\n", read_server);
-                        // write(client_wkp, read_server, strlen(read_server));
-
-
+                        int len = strlen(read_msg);
+                        read_msg[len-1] = '\0';
                         printf("user %s> %s\n", client_pid, read_msg);
+
+                        fclose(server_fp);
+
+                        int server_read_fp = open("SERVER_MESSAGES", O_RDONLY);
+                        char *read_buff = malloc(MSG_SIZE);
+
+                        while (read(server_read_fp, read_buff, MSG_SIZE) > 0) {
+                            write(client_socket, read_buff, MSG_SIZE);
+                        }
+                        // close(server_read_fp);
                     }
                 }
             }

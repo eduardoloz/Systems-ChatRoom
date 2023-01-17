@@ -21,6 +21,19 @@ Populate project proposal
 ## 01/12/23
 * Finished the message linked list.
 * Expanded message datatype to include metadata such as user and time sent
-*In class we fixed our previously working demo in the server to the sample server code with refresh. Since that is working all we have left is to implement the struct code for message history
-*Struct almost fully done
+* In class we fixed our previously working demo in the server to the sample server code with refresh. Since that is working all we have left is to implement the struct code for message history
+* Struct almost fully done
 
+## 01/13/23
+* Worked on both forking and selecting server since we had trouble with both
+
+## 01/15/23
+* Made progress on forking server - ran into issue with other's messages only being sent back when the client sent a message
+* Ran into issues on splitting server, only one message sent or received at a time
+
+## 01/16/23
+* Made progress on selecting server, but got stuck on sending messages back to clients
+* Figured out forking server, solved issues with messages, gave up on selecting
+* Used terminal escape characters to prevent overwriting
+* Created usernames
+* Created string formatting with terminal escape characters

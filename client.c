@@ -7,6 +7,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <stdlib.h>
+#define MSG_SIZE 1025
 
 int main(int argc, char *argv[]){
     if(argc < 3) {
@@ -29,6 +30,9 @@ int main(int argc, char *argv[]){
         return 1;
     }
 
+
+    //I CARE
+
     int sd = socket(results->ai_family, results->ai_socktype, results->ai_protocol);
     if(sd < 0){
         printf("%s\n",strerror(errno));
@@ -39,26 +43,36 @@ int main(int argc, char *argv[]){
         printf("Failed to connect\n");
         exit(1);
     }
+    char buff[MSG_SIZE];
+    printf("Enter Username: ");
+    fgets(buff, MSG_SIZE, stdin);
+    buff[strlen(buff)-1] = '\0';
+    write(sd, buff, sizeof(buff));
+
 
     //DO STUFF
     int n;
-    char buff[1025];
-    while(1){
-        strcpy(buff, "Hello");
-        buff[strlen(buff)] = '\0';
 
-      	if((n = write(sd, buff, sizeof(buff))) <= 0){
-      		printf("\n write error \n");
-            exit(1);
-<<<<<<< HEAD
-      	}
-        printf("Sent: %s\n",buff);
+    fd_set read_fds;
+
+    while(1){
+        FD_ZERO(&read_fds);
+        FD_SET(STDIN_FILENO, &read_fds);
+        FD_SET(sd,&read_fds);
+        int i = select(sd+1, &read_fds, NULL, NULL, NULL);
+
+        if(FD_ISSET(STDIN_FILENO, &read_fds)){
+            fgets(buff, MSG_SIZE, stdin);
+            buff[strlen(buff)-1] = '\0';
+            write(sd, buff, MSG_SIZE);
+        }
+        if(FD_ISSET(sd, &read_fds)){
+            read(sd, buff, MSG_SIZE);
+            printf("%s\n", buff);
+        }
+
         sleep(1);
-=======
-  	    }
-        write(sd, buff, MSG_SIZE);
-        printf("MESSAGE SENT WAS: %s\n", buff);
->>>>>>> refs/remotes/origin/main
+
     }
 
     freeaddrinfo(results);

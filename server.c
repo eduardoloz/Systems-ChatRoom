@@ -8,6 +8,9 @@
 #include <errno.h>
 #include <unistd.h>
 #include <stdlib.h>
+#define MAXCLIENTS 200
+#define MSG_SIZE 1025
+
 
 int main(){
     struct addrinfo * hints, * results;
@@ -43,41 +46,48 @@ int main(){
     struct sockaddr_storage client_address;
     sock_size = sizeof(client_address);
 
+
+    char buff[MSG_SIZE]="";
+
     fd_set read_fds;
 
-    char buff[1025]="";
-
+    int connections[MAXCLIENTS];
+    char* usernames[MAXCLIENTS];
+    int users = 1;
+    connections[0] = listen_socket;
     for(;;){
-        printf("Happening again\n");
         FD_ZERO(&read_fds);
-        printf("This step isn't reached\n");
-        //FD_SET(STDIN_FILENO, &read_fds);
-        //printf("This step isn't reached\n");
-        FD_SET(listen_socket,&read_fds);
-        printf("This step isn't reached\n");
+        for(int i = 0; i < users; i++){
+            FD_SET(connections[i], &read_fds);
+        }
+        int i = select(connections[users-1]+1, &read_fds, NULL, NULL, NULL);
 
-        int i = select(listen_socket + 1, &read_fds, NULL, NULL, NULL);
-
-        printf("i is currently: %d\n", i);
         // if socket
         if (FD_ISSET(listen_socket, &read_fds)) {
             //accept the connection
             int client_socket = accept(listen_socket,(struct sockaddr *)&client_address, &sock_size);
-            printf("Connected, waiting for data.\n");
+            read(client_socket, buff, sizeof(buff));
+            printf("New User %s Has Joined\n", buff);
 
-            //read the whole buff
-            read(client_socket,buff, sizeof(buff));
+            usernames[users] = malloc((strlen(buff)+1)*sizeof(char));
+            strcpy(usernames[users], buff);
 
-
-            //trim the string
-            buff[strlen(buff)]=0; //clear newline
-            if(buff[strlen(buff)]==13){
-                //clear windows line ending
-                buff[strlen(buff)]=0;
+            connections[users] = client_socket;
+            FD_SET(client_socket,&read_fds);
+            users++;
+        } else {
+            for(int i = 1; i<users; i++){
+                if(FD_ISSET(connections[i], &read_fds)){
+                    read(connections[i],buff, sizeof(buff));
+                    printf("%s> %s\n", usernames[i], buff);
+                    // for(int j = 1; j<users; i++){
+                    //     // char temp[MSG_SIZE];
+                    //     // sprintf(temp, "%s> ", usernames[i]);
+                    //     // strcat(temp, buff);
+                    //     write(connections[j],buff, sizeof(buff));
+                    // }
+                }
             }
-
-            printf("\nRecieved from client '%s'\n",buff);
-            close(client_socket);
         }
     }
 

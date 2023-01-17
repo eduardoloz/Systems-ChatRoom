@@ -41,3 +41,4 @@ Additionally: worked on the implementation of the server select with old forking
     * Basically made the chat feel more like a chat (less ugly)
 * Created usernames
 * Created string formatting with terminal escape characters
+* Was unable to reset the formatting after printing the escape characters

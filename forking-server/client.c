@@ -43,10 +43,25 @@ int main(int argc, char *argv[]){
         exit(1);
     }
 
-    // sent pid to server
-    char *pid_str = malloc(5);
-    sprintf(pid_str, "%d", getpid());
-    write(sd, pid_str, 6);
+    // sent username to server
+    char *pid_str = calloc(5, sizeof(char));
+    char *answer = calloc(2, sizeof(char));
+    char *username = calloc(30, sizeof(char));
+
+    printf("Would you like to choose your username? (y\\n)\n");
+    fgets(answer, sizeof(answer), stdin);
+    answer[strlen(answer)-1] = '\0';
+    if (strcasecmp(answer, "y") == 0){
+        printf("Enter username:\n");
+        fgets(username, sizeof(username), stdin);    
+        username[strlen(username)-1] = '\0';
+        write(sd, username, sizeof(username));
+    }else{
+        printf("No user name for you! Pid given!");
+        sprintf(pid_str, "%d", getpid());
+        strcpy(username, pid_str);
+        write(sd, username, sizeof(username));
+    }
 
     //DO STUFF
     int n;
@@ -56,7 +71,7 @@ int main(int argc, char *argv[]){
     //int flags = fcntl(sd, F_GETFL, 0);
     //fcntl(sd, F_SETFL, flags | O_NONBLOCK);
 
-    // printf("\033[1;1H");
+    printf("\033[1;1H");
     printf("\033[9999;1H");
 
     fd_set read_fds;

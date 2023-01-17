@@ -32,10 +32,10 @@
             //wait for next client
             int client_socket = accept(listen_socket,(struct sockaddr *)&client_address, &sock_size);
 
-            // request the client's pid
-            char *client_pid = malloc(6);
-            read(client_socket, client_pid, 6);
-            printf("user %s has joined\n", client_pid);
+            // request the client's username
+            char *username = calloc(15, sizeof(char));
+            read(client_socket, username, sizeof(username));
+            printf("user %s has joined\n", username);
 
             int child = fork();
             all_children[n_child] = child;
@@ -66,16 +66,16 @@
 
                         // check to see if connection was closed
                         if (strcmp(read_msg, SIG_CLIENT_EXIT) == 0) {
-                            printf("user %s has left\n", client_pid);
+                            printf("user %s has left\n", username);
                             exit(0);
                         }
 
                         // write message to buffer
-                        fprintf(server_fp, "user %s> %s", client_pid, read_msg);
+                        fprintf(server_fp, "user %s> %s", username, read_msg);
 
                         int len = strlen(read_msg);
                         read_msg[len-1] = '\0';
-                        printf("user %s> %s\n", client_pid, read_msg);
+                        printf("user %s> %s\n", username, read_msg);
 
                         fclose(server_fp);
                         // close(server_read_fp);

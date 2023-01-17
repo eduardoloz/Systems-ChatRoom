@@ -8,6 +8,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <stdlib.h>
+#define MAXCLIENTS 200
 
 int main(){
     struct addrinfo * hints, * results;
@@ -47,31 +48,33 @@ int main(){
     char buff[1025]="";
 
     fd_set read_fds;
-    FD_ZERO(&read_fds);
-    FD_SET(listen_socket,&read_fds);
-    
+
+    int connections[MAXCLIENTS];
+    int users = 1;
+    connections[0] = listen_socket;
+
     for(;;){
-        int i = select(listen_socket + 1, &read_fds, NULL, NULL, NULL);
+        FD_ZERO(&read_fds);
+        for(int i = 0; i<users; i++){
+            FD_SET(connections[i],&read_fds);
+        }
+        int i = select(connections[users-1]+1, &read_fds, NULL, NULL, NULL);
 
         // if socket
         if (FD_ISSET(listen_socket, &read_fds)) {
             //accept the connection
             int client_socket = accept(listen_socket,(struct sockaddr *)&client_address, &sock_size);
+            printf("New Client Joined\n");
             //read the whole buff
-            FD_SET(client_socket);
-            read(client_socket,buff, sizeof(buff));
-            printf("%s\n", buff);
-        } else{
-
-            //
-            read(client_socket,buff, sizeof(buff));
-            printf("%s\n", buff);
-
-            // buff[strlen(buff)]=0; //clear newline
-            // if(buff[strlen(buff)]==13){
-            //     //clear windows line ending
-            //     buff[strlen(buff)]=0;
-            // }
+            connections[users] = client_socket;
+            // FD_SET(client_socket,&read_fds);
+            users++;
+        }
+        for(int i = 0; i<users; i++){
+            if(FD_ISSET(connections[i], &read_fds)){
+                read(connections[i],buff, sizeof(buff));
+                printf("%s\n", buff);
+            }
         }
     }
 

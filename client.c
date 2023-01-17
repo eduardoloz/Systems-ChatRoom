@@ -29,6 +29,9 @@ int main(int argc, char *argv[]){
         return 1;
     }
 
+
+    //I CARE
+
     int sd = socket(results->ai_family, results->ai_socktype, results->ai_protocol);
     if(sd < 0){
         printf("%s\n",strerror(errno));
@@ -52,7 +55,7 @@ int main(int argc, char *argv[]){
             exit(1);
       	}
         printf("Sent: %s\n",buff);
-        sleep(1);
+        sleep(2);
 
     }
 

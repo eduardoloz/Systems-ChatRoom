@@ -25,15 +25,19 @@ Populate project proposal
 * Struct almost fully done
 
 ## 01/13/23
-* Worked on both forking and selecting server since we had trouble with both
+* Worked on both forking and selecting server since we had trouble with both. At this moment, not sure which one may work (at all, not just better)
+
+Additionally: worked on the implementation of the server select with old forking version of the code (discontinued as of 1/16)
 
 ## 01/15/23
 * Made progress on forking server - ran into issue with other's messages only being sent back when the client sent a message
-* Ran into issues on splitting server, only one message sent or received at a time
+* Ran into issues on splitting server, only one message sent or received at a time.
+    *select on the server-end was not the behavior we were looking for
 
 ## 01/16/23
 * Made progress on selecting server, but got stuck on sending messages back to clients
 * Figured out forking server, solved issues with messages, gave up on selecting
 * Used terminal escape characters to prevent overwriting
+    * Basically made the chat feel more like a chat (less ugly)
 * Created usernames
 * Created string formatting with terminal escape characters

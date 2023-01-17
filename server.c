@@ -9,6 +9,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 #define MAXCLIENTS 200
+#define MSG_SIZE 1025
+
 
 int main(){
     struct addrinfo * hints, * results;
@@ -45,7 +47,7 @@ int main(){
     sock_size = sizeof(client_address);
 
 
-    char buff[1025]="";
+    char buff[MSG_SIZE]="";
 
     fd_set read_fds;
 
@@ -53,9 +55,11 @@ int main(){
     char* usernames[MAXCLIENTS];
     int users = 1;
     connections[0] = listen_socket;
-    FD_ZERO(&read_fds);
-    FD_SET(listen_socket, &read_fds);
     for(;;){
+        FD_ZERO(&read_fds);
+        for(int i = 0; i < users; i++){
+            FD_SET(connections[i], &read_fds);
+        }
         int i = select(connections[users-1]+1, &read_fds, NULL, NULL, NULL);
 
         // if socket
@@ -76,6 +80,12 @@ int main(){
                 if(FD_ISSET(connections[i], &read_fds)){
                     read(connections[i],buff, sizeof(buff));
                     printf("%s> %s\n", usernames[i], buff);
+                    // for(int j = 1; j<users; i++){
+                    //     // char temp[MSG_SIZE];
+                    //     // sprintf(temp, "%s> ", usernames[i]);
+                    //     // strcat(temp, buff);
+                    //     write(connections[j],buff, sizeof(buff));
+                    // }
                 }
             }
         }

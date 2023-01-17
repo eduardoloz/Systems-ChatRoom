@@ -54,10 +54,11 @@ int main(int argc, char *argv[]){
     int n;
 
     fd_set read_fds;
-    FD_ZERO(&read_fds);
-    FD_SET(STDIN_FILENO, &read_fds);
-    FD_SET(sd,&read_fds);
+
     while(1){
+        FD_ZERO(&read_fds);
+        FD_SET(STDIN_FILENO, &read_fds);
+        FD_SET(sd,&read_fds);
         int i = select(sd+1, &read_fds, NULL, NULL, NULL);
 
         if(FD_ISSET(STDIN_FILENO, &read_fds)){

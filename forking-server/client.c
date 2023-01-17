@@ -53,14 +53,14 @@ int main(int argc, char *argv[]){
     answer[strlen(answer)-1] = '\0';
     if (strcasecmp(answer, "y") == 0){
         printf("Enter username:\n");
-        fgets(username, sizeof(username), stdin);    
+        fgets(username, USR_SIZE, stdin);    
         username[strlen(username)-1] = '\0';
-        write(sd, username, sizeof(username));
+        write(sd, username, strlen(username));
     }else{
         printf("No user name for you! Pid given!");
         sprintf(pid_str, "%d", getpid());
         strcpy(username, pid_str);
-        write(sd, username, sizeof(username));
+        write(sd, username, strlen(username));
     }
 
     //DO STUFF

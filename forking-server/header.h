@@ -16,5 +16,6 @@
 
 #define MSG_SIZE 1000
 #define SIG_CLIENT_EXIT "SIG_CLIENT_EXIT"
+#define USR_SIZE 255
 
 #endif

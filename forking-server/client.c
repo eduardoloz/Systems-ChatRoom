@@ -64,9 +64,9 @@ int main(int argc, char *argv[]){
 
         // here use select
         FD_ZERO(&read_fds);
-        FD_SET(STDIN_FILENO, &read_fds);
+        FD_SET(sd, &read_fds);
         FD_SET(sd,&read_fds);
-        int i = select(STDIN_FILENO+1, &read_fds, NULL, NULL, NULL);
+        int i = select(sd+1, &read_fds, NULL, NULL, NULL);
         if(FD_ISSET(sd, &read_fds)){
             read(sd, read_buff, MSG_SIZE);
             printf("%s\n", read_buff);
